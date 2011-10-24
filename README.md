@@ -1,0 +1,4 @@
+typedkey
+========
+
+Typesafe keys.
