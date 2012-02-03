@@ -27,7 +27,7 @@ trait TypedKey[T] extends Ordered[TypedKey[_]]{
   def keyType: Manifest[T]
 }
 
-abstract class TypedKeySkeleton[T: Manifest](name: String) extends TypedKey[T] {
+abstract class TypedKeySkeleton[T: Manifest](val name: String) extends TypedKey[T] {
   def keyType = manifest[T]
 
   override def hashCode = (31 * name.## + keyType.##)
