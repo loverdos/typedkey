@@ -19,6 +19,8 @@ package com.ckkloverdos.key
 /**
  * A key with a specific type attached.
  *
+ * Keys are ordered by their names and are stored in [[com.ckkloverdos.env.Env]]ironments.
+ *
  * @author Christos KK Loverdos <loverdos@gmail.com>.
  */
 
