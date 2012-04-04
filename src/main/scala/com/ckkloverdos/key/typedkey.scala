@@ -16,6 +16,10 @@
 
 package com.ckkloverdos.key
 
+import com.ckkloverdos.env.Env
+import com.ckkloverdos.maybe.Maybe
+import com.ckkloverdos.key.TypedKey.FromEnvTypedKey
+
 /**
  * A key with a specific type attached.
  *
@@ -43,12 +47,22 @@ abstract class TypedKeySkeleton[T: Manifest](val name: String) extends TypedKey[
     case _ => false
   }
 
-  override def toString =
-    {
-      val cname = getClass.getName
-      val shortName = cname.substring(cname.lastIndexOf('.') + 1)
-      "%s[%s](%s)".format(shortName, keyType, name)
-    }
+//  override def toString =
+//    {
+//      val cname = getClass.getName
+//      val shortName = cname.substring(cname.lastIndexOf('.') + 1)
+//      "%s[%s](%s)".format(shortName, keyType, name)
+//    }
 
   def compare(that: TypedKey[_]) = this.name compareTo that.name
+}
+
+object TypedKey {
+  final class FromEnvTypedKey[T: Manifest](key: TypedKey[T]) {
+    def from(env: Env): Maybe[T] = env.get(key)
+  }
+
+  implicit def typedKeyWithFrom[T: Manifest](key: TypedKey[T]): FromEnvTypedKey[T] = {
+    new FromEnvTypedKey(key)
+  }
 }

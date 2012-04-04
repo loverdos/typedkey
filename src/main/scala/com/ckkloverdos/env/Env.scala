@@ -16,27 +16,35 @@
 
 package com.ckkloverdos.env
 
-import com.ckkloverdos.key.TypedKey
 import com.ckkloverdos.maybe.{NoVal, Maybe}
+import com.ckkloverdos.key._
 
-class Env(val map: Map[TypedKey[_], Any] = Map()) {
+class Env private[env](private val map: Map[TypedKey[_], Any]) {
   /**
    * Get a value or throw an exception if it does not exist.
    */
   @throws(classOf[NoSuchElementException])
+  @throws(classOf[ClassCastException])
   def getEx[T : Manifest](key: TypedKey[T]): T = {
     map(key).asInstanceOf[T]
   }
 
   def get[T : Manifest](key: TypedKey[T]): Maybe[T] = {
     map.get(key) match {
-      case Some(value) ⇒ Maybe(value.asInstanceOf[T])
-      case None        ⇒ NoVal
+      case Some(value) ⇒
+        Maybe(value).castTo[T]
+      case None ⇒
+        NoVal
     }
   }
+  
+  def +[T : Manifest](key: TypedKey[T], value: T): Env = new Env(map + (key -> value))
+  
+  def +[T : Manifest](kv: (TypedKey[T], T)): Env = new Env(map + kv)
 
-  def ++(other: Map[TypedKey[_], Any]): Env = new Env(map ++ other)
-  def ++(other: Env): Env = new Env(this.map ++ other.map)
+  def +(kv: (String, Env)): Env = this + (EnvKey(kv._1), kv._2)
+
+  def ++(other: Env): Env = new Env(other.map ++ map)
 
   override def hashCode() = map.##
   override def equals(any: Any): Boolean = {
@@ -74,13 +82,14 @@ class Env(val map: Map[TypedKey[_], Any] = Map()) {
 
   def selectType[T : Manifest]: Env =
     new Env(Map(keysOfType[T].toSeq.map(tk => (tk, map(tk))): _*))
+  
 
   def contains[T : Manifest](key: TypedKey[T]): Boolean = {
     map.contains(key)
   }
+}
 
-  def toBuilder = new EnvBuilder(map)
-
-
+object Env {
+  def apply() = new Env(Map())
 }
 

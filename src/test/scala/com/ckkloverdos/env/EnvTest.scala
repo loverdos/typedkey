@@ -17,49 +17,57 @@ package com.ckkloverdos.env
 
 import org.junit.Assert
 import org.junit.Test
-import com.ckkloverdos.key.{IntKey, StringKey}
 import com.ckkloverdos.maybe.Just
+import com.ckkloverdos.key.{DoubleKey, IntKey, StringKey}
 
 /**
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
 class EnvTest {
-  val Hello_World = "Hello.World"
-  val Just_another_Key = "Just.another.Key"
+  val KeyName_1 = "it's.key"
+  val KeyName_2 = "just.another.key"
+  val KeyName_3 = "day.in.paradise.key"
 
-  val strKey1 = StringKey(Hello_World)
-  val strVal1 = "Value 1"
-  val intKey1 = IntKey(Just_another_Key)
-  val intVal1 = 12
-  val strKey2 = StringKey(Just_another_Key)
-  val strVal2 = "Value 2"
-  val intKey2 = IntKey(Hello_World)
-  val intVal2 = 500
+  val key1_str = StringKey(KeyName_1)
+  val val1_str = "Value 1"
+  val key2_int = IntKey(KeyName_2)
+  val val2_int = 12
+  val key3_str = StringKey(KeyName_2)
+  val val3_str = "Value 2"
+  val key4_int = IntKey(KeyName_1)
+  val val4_int = 500
+  val key5_double = DoubleKey(KeyName_3)
+  val val5_double = 1.0
 
-  lazy val envb = new EnvBuilder() +
-    (strKey1, strVal1) +
-    (intKey1, intVal1) +
-    (intKey2, intVal2) +
-    (strKey2, strVal2)
-
-  lazy val env = envb.build
+  val env = Env() +
+    (key1_str, val1_str) +
+    (key2_int, val2_int) +
+    (key3_str, val3_str) +
+    (key4_int, val4_int) +
+    (key5_double, val5_double)
 
   @Test
   def testStringKey: Unit = {
-    val strValue = env.get(strKey1)
-    Assert.assertEquals(Just(strVal1), strValue)
+    val strValue = env.get(key1_str)
+    Assert.assertEquals(Just(val1_str), strValue)
   }
 
   @Test
   def testIntKey: Unit = {
-    val intValue = env.get(intKey1)
-    Assert.assertEquals(Just(intVal1), intValue)
+    val intValue = env.get(key2_int)
+    Assert.assertEquals(Just(val2_int), intValue)
+  }
+
+  @Test
+  def testDoubleKey: Unit = {
+    val doubleValue = env.get(key5_double)
+    Assert.assertEquals(Just(val5_double), doubleValue)
   }
 
   @Test
   def testKeysOfType: Unit = {
-    val expectedSet = Set(strKey1, strKey2)
+    val expectedSet = Set(key1_str, key3_str)
     val computedSet = env.keysOfType[String]
     Assert.assertEquals(expectedSet, computedSet)
   }
@@ -69,15 +77,15 @@ class EnvTest {
     val computedEnv = env.selectType[String]
 
     Assert.assertEquals(2, computedEnv.size)
-    Assert.assertFalse(strKey1 == strKey2)
-    Assert.assertTrue(computedEnv.contains(strKey1))
-    Assert.assertTrue(computedEnv.contains(strKey2))
+    Assert.assertFalse(key1_str == key3_str)
+    Assert.assertTrue(computedEnv.contains(key1_str))
+    Assert.assertTrue(computedEnv.contains(key3_str))
   }
 
   @Test
   def testKeysOfName: Unit = {
-    val expectedSet = Set(strKey1, intKey2)
-    val computedSet = env.keysOfName(Hello_World)
+    val expectedSet = Set(key1_str, key4_int)
+    val computedSet = env.keysOfName(KeyName_1)
     Assert.assertEquals(expectedSet, computedSet)
   }
 }
