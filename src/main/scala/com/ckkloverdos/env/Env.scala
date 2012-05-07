@@ -32,7 +32,8 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
   def get[T : Manifest](key: TypedKey[T]): Maybe[T] = {
     map.get(key) match {
       case Some(value) ⇒
-        Maybe(value).castTo[T]
+        Maybe(value).asInstanceOf[Maybe[T]]
+        
       case None ⇒
         NoVal
     }
