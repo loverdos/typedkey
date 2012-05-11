@@ -33,7 +33,7 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
     map.get(key) match {
       case Some(value) ⇒
         Maybe(value).asInstanceOf[Maybe[T]]
-        
+
       case None ⇒
         NoVal
     }
@@ -48,12 +48,17 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
   def ++(other: Env): Env = new Env(other.map ++ map)
 
   override def hashCode() = map.##
+
   override def equals(any: Any): Boolean = {
     any match {
-      case that: Env ⇒ this.map == that.map && this.getClass == that.getClass
-      case _         ⇒ false
+      case that: Env ⇒
+        this.map == that.map && this.getClass == that.getClass
+
+      case _ ⇒
+        false
     }
   }
+
   override def toString = "Env(%s)".format(map.mkString(", "))
 
   def size = map.size
@@ -87,6 +92,22 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
 
   def contains[T : Manifest](key: TypedKey[T]): Boolean = {
     map.contains(key)
+  }
+
+  /**
+   * Returns a `Map` whose keys are the names of the typed keys. Beware that typed keys may have the same names,
+   * so this can lead to loss of key-value pairs.
+   */
+  def toMap: Map[String, Any] = {
+    map.map{case (tk, vt) ⇒ (tk.name, vt)}
+  }
+
+  /**
+   * Returns a [[java.util.Map]] whose keys are the names of the typed keys. Beware that typed keys may have the same
+   * names, so this can lead to loss of key-value pairs.
+   */
+  def toJavaMap: java.util.Map[String, Any] = {
+    scala.collection.JavaConversions.mapAsJavaMap(toMap)
   }
 }
 
