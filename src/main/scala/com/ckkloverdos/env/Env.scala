@@ -23,11 +23,22 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
   /**
    * Get a value or throw an exception if it does not exist.
    */
+  @inline
   @throws(classOf[NoSuchElementException])
   @throws(classOf[ClassCastException])
   def getEx[T : Manifest](key: TypedKey[T]): T = {
+    this apply key
+  }
+
+  /**
+   * Get a value or throw an exception if it does not exist.
+   */
+  @throws(classOf[NoSuchElementException])
+  @throws(classOf[ClassCastException])
+  def apply[T : Manifest](key: TypedKey[T]): T = {
     map(key).asInstanceOf[T]
   }
+
 
   def get[T : Manifest](key: TypedKey[T]): Maybe[T] = {
     map.get(key) match {
@@ -102,12 +113,19 @@ class Env private[env](private val map: Map[TypedKey[_], Any]) {
     map.map{case (tk, vt) ⇒ (tk.name, vt)}
   }
 
+  private[this] def fillJMap[M <: java.util.Map[String, AnyRef]](jmap: M): M = {
+    for((tk, vt) ← map) {
+      jmap.put(tk.name, vt.asInstanceOf[AnyRef])
+    }
+    jmap
+  }
+
   /**
-   * Returns a [[java.util.Map]] whose keys are the names of the typed keys. Beware that typed keys may have the same
-   * names, so this can lead to loss of key-value pairs.
+   * Returns a [[java.util.Map]] whose keys are the names of the typed keys. Beware that typed keys may have the
+   * same names, so this can lead to loss of key-value pairs.
    */
-  def toJavaMap: java.util.Map[String, Any] = {
-    scala.collection.JavaConversions.mapAsJavaMap(toMap)
+  def toJavaMap: java.util.Map[String, AnyRef] = {
+    fillJMap(new java.util.HashMap[String, AnyRef](size))
   }
 }
 
