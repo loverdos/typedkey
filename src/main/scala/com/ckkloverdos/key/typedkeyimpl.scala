@@ -16,17 +16,43 @@
 
 package com.ckkloverdos.key
 
-final case class ByteKey   (override val name: String) extends TypedKeySkeleton[Byte]   (name)
-final case class BooleanKey(override val name: String) extends TypedKeySkeleton[Boolean](name)
-final case class ShortKey  (override val name: String) extends TypedKeySkeleton[Short]  (name)
-final case class CharKey   (override val name: String) extends TypedKeySkeleton[Char]   (name)
-final case class IntKey    (override val name: String) extends TypedKeySkeleton[Int]    (name)
-final case class LongKey   (override val name: String) extends TypedKeySkeleton[Long]   (name)
-final case class FloatKey  (override val name: String) extends TypedKeySkeleton[Float]  (name)
-final case class DoubleKey (override val name: String) extends TypedKeySkeleton[Double] (name)
+final case class ByteKey   (override val name: String) extends TypedKeyOnly[Byte]   (name)
+final case class BooleanKey(override val name: String) extends TypedKeyOnly[Boolean](name)
+final case class ShortKey  (override val name: String) extends TypedKeyOnly[Short]  (name)
+final case class CharKey   (override val name: String) extends TypedKeyOnly[Char]   (name)
+final case class IntKey    (override val name: String) extends TypedKeyOnly[Int]    (name)
+final case class LongKey   (override val name: String) extends TypedKeyOnly[Long]   (name)
+final case class FloatKey  (override val name: String) extends TypedKeyOnly[Float]  (name)
+final case class DoubleKey (override val name: String) extends TypedKeyOnly[Double] (name)
+final case class StringKey (override val name: String) extends TypedKeyOnly[String] (name)
 
-final case class StringKey (override val name: String) extends TypedKeySkeleton[String] (name)
+final case class ListKey [T: Manifest](override val name: String) extends TypedKeyOnly[List[T]](name)
+final case class ArrayKey[T: Manifest](override val name: String) extends TypedKeyOnly[Array[T]](name)
+final case class SetKey  [T: Manifest](override val name: String) extends TypedKeyOnly[Set[T]](name)
 
-final case class ListKey [T: Manifest](override val name: String) extends TypedKeySkeleton[List[T]](name)
-final case class ArrayKey[T: Manifest](override val name: String) extends TypedKeySkeleton[Array[T]](name)
-final case class SetKey  [T: Manifest](override val name: String) extends TypedKeySkeleton[Set[T]](name)
+final case class ByteKeyDefault(override val name: String, override val default: Byte)
+  extends TypedKeyWithDefault[Byte](name, default)
+
+final case class BooleanKeyDefault(override val name: String, override val default: Boolean)
+  extends TypedKeyWithDefault[Boolean](name, default)
+
+final case class ShortKeyDefault(override val name: String, override val default: Short)
+  extends TypedKeyWithDefault[Short](name, default)
+
+final case class CharKeyDefault(override val name: String, override val default: Char)
+  extends TypedKeyWithDefault[Char](name, default)
+
+final case class IntKeyDefault(override val name: String, override val default: Int)
+  extends TypedKeyWithDefault[Int](name, default)
+
+final case class LongKeyDefault(override val name: String, override val default: Long)
+  extends TypedKeyWithDefault[Long](name, default)
+
+final case class FloatKeyDefault(override val name: String, override val default: Float)
+  extends TypedKeyWithDefault[Float](name, default)
+
+final case class DoubleKeyDefault(override val name: String, override val default: Double)
+  extends TypedKeyWithDefault[Double](name, default)
+
+final case class StringKeyDefault(override val name: String, override val default: String)
+  extends TypedKeyWithDefault[String](name, default)

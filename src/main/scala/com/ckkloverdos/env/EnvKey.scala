@@ -16,12 +16,15 @@
 
 package com.ckkloverdos.env
 
-import com.ckkloverdos.key.TypedKeySkeleton
+import com.ckkloverdos.key.TypedKeyWithDefault
 
 /**
- * A typed key for an [[com.ckkloverdos.env.Env]].
+ * A typed key for an [[com.ckkloverdos.env.Env]] with a default value of an empty `Env`.
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
 
-case class EnvKey(override val name: String) extends TypedKeySkeleton[Env](name)
+case class EnvKey(
+    override val name: String,
+    override val default: Env = Env()
+) extends TypedKeyWithDefault(name, default)

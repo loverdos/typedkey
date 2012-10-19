@@ -17,7 +17,6 @@ package com.ckkloverdos.env
 
 import org.junit.Assert
 import org.junit.Test
-import com.ckkloverdos.maybe.Just
 import com.ckkloverdos.key.{DoubleKey, IntKey, StringKey}
 
 /**
@@ -50,19 +49,19 @@ class EnvTest {
   @Test
   def testStringKey: Unit = {
     val strValue = env.get(key1_str)
-    Assert.assertEquals(Just(val1_str), strValue)
+    Assert.assertEquals(Some(val1_str), strValue)
   }
 
   @Test
   def testIntKey: Unit = {
     val intValue = env.get(key2_int)
-    Assert.assertEquals(Just(val2_int), intValue)
+    Assert.assertEquals(Some(val2_int), intValue)
   }
 
   @Test
   def testDoubleKey: Unit = {
     val doubleValue = env.get(key5_double)
-    Assert.assertEquals(Just(val5_double), doubleValue)
+    Assert.assertEquals(Some(val5_double), doubleValue)
   }
 
   @Test

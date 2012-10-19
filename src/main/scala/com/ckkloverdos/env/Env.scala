@@ -16,18 +16,37 @@
 
 package com.ckkloverdos.env
 
-import com.ckkloverdos.maybe.{NoVal, Maybe}
 import com.ckkloverdos.key._
 
 final class Env private[env](private[env] val map: Map[TypedKey[_], Any]) extends EnvBase[Env] {
 
   protected def newEnv(map: Map[TypedKey[_], Any]): Env = new Env(map)
 
-  def +[T : Manifest](key: TypedKey[T], value: T): Env = new Env(map + (key -> value))
-  
-  def +[T : Manifest](kv: (TypedKey[T], T)): Env = new Env(map + kv)
+  def +[T : Manifest](
+      key: TypedKeyOnly[T],
+      value: T
+  ): Env = {
 
-  def +(kv: (String, Env)): Env = this + (EnvKey(kv._1), kv._2)
+    new Env(map + (key -> value))
+  }
+
+  def +[T : Manifest](
+      key: TypedKeyWithDefault[T],
+      value: Option[T]
+  ): Env = {
+
+    new Env(map + (key -> value.getOrElse(key.default)))
+  }
+
+  def +[T : Manifest](
+      key: TypedKeyWithDefault[T],
+      value: T
+  ): Env = {
+
+    new Env(map + (key -> value))
+  }
+
+  def +[T : Manifest](kv: (TypedKeyOnly[T], T)): Env = new Env(map + kv)
 
   def ++(other: EnvBase[_]): Env = new Env(other.map ++ map)
 
