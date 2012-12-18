@@ -16,7 +16,6 @@
 
 package com.ckkloverdos.key
 
-import com.ckkloverdos.env.Env
 
 /**
  * A key with a specific type attached.

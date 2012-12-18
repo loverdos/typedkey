@@ -1,12 +1,15 @@
 package com.ckkloverdos.env;
 
 import com.ckkloverdos.key.TypedKeyOnly;
+import com.ckkloverdos.key.TypedKeyWithDefault;
 
 /**
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
 public final class JEnvHelpers {
   private JEnvHelpers() {}
+
+  private static final EnvHelpers envHelpers = new EnvHelpers();
 
   public static Env newEnv() {
     return Env$.MODULE$.apply();
@@ -18,6 +21,14 @@ public final class JEnvHelpers {
 
   public static <A> Env remove(Env env, TypedKeyOnly<A> key) {
     return env.$minus(key, key.keyType());
+  }
+
+  public static <A> TypedKeyOnly<A> newTypedKeyOnly(String name, Class<A> typ) {
+    return envHelpers.newTypedKeyOnly(name, typ);
+  }
+
+  public static <A> TypedKeyWithDefault<A> newTypedKeyWithDefault(String name, A value, Class<A> typ) {
+    return envHelpers.newTypedKeyWithDefault(name, value, typ);
   }
 
   public static <A, B> Env add(
