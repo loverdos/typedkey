@@ -33,10 +33,8 @@ public final class JEnvHelpers {
 
   public static <A, B> Env add(
       Env env,
-      TypedKeyOnly<A> keyA,
-      A valueA,
-      TypedKeyOnly<B> keyB,
-      B valueB
+      TypedKeyOnly<A> keyA, A valueA,
+      TypedKeyOnly<B> keyB, B valueB
   ) {
 
     return env.
@@ -46,12 +44,9 @@ public final class JEnvHelpers {
 
   public static <A, B, C> Env add(
       Env env,
-      TypedKeyOnly<A> keyA,
-      A valueA,
-      TypedKeyOnly<B> keyB,
-      B valueB,
-      TypedKeyOnly<C> keyC,
-      C valueC
+      TypedKeyOnly<A> keyA, A valueA,
+      TypedKeyOnly<B> keyB, B valueB,
+      TypedKeyOnly<C> keyC, C valueC
   ) {
 
     return env.
@@ -62,14 +57,10 @@ public final class JEnvHelpers {
 
   public static <A, B, C, D> Env add(
       Env env,
-      TypedKeyOnly<A> keyA,
-      A valueA,
-      TypedKeyOnly<B> keyB,
-      B valueB,
-      TypedKeyOnly<C> keyC,
-      C valueC,
-      TypedKeyOnly<D> keyD,
-      D valueD
+      TypedKeyOnly<A> keyA, A valueA,
+      TypedKeyOnly<B> keyB, B valueB,
+      TypedKeyOnly<C> keyC, C valueC,
+      TypedKeyOnly<D> keyD, D valueD
 
   ) {
 
