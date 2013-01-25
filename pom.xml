@@ -89,8 +89,8 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/scala</sourceDirectory>
-    <testSourceDirectory>src/test/scala</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
     <resources>
       <resource>
         <directory>${basedir}/src/main/resources</directory>
@@ -133,17 +133,31 @@
           <recompileMode>incremental</recompileMode>
           <scalaVersion>${scala.version}</scalaVersion>
           <charset>${project.build.sourceEncoding}</charset>
+          <javacArgs>
+            <javacArg>-Xlint:unchecked</javacArg>
+            <javacArg>-Xlint:deprecation</javacArg>
+          </javacArgs>
           <args>
             <arg>-deprecation</arg>
             <arg>-unchecked</arg>
             <arg>-optimize</arg>
           </args>
-          <charset>${project.build.sourceEncoding}</charset>
         </configuration>
         <executions>
           <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
             <goals>
+              <goal>add-source</goal>
               <goal>compile</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>scala-test-compile</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <!--<goal>add-source</goal>-->
               <goal>testCompile</goal>
             </goals>
           </execution>
@@ -163,6 +177,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
         <executions>
           <execution>
             <id>attach-javadoc</id>
@@ -177,6 +192,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
