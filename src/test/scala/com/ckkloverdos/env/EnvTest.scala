@@ -17,7 +17,7 @@ package com.ckkloverdos.env
 
 import org.junit.Assert
 import org.junit.Test
-import com.ckkloverdos.key.{DoubleKey, IntKey, StringKey}
+import com.ckkloverdos.env.EnvHelpers.{DoubleKey, IntKey, StringKey}
 
 /**
  *
