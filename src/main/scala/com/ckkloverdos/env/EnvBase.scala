@@ -101,6 +101,10 @@ abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
     }
   }
 
+  def getByName(keyName: String): Set[Any] = {
+    keysOfName(keyName).map(map.apply)
+  }
+
   def size = map.size
 
   def keySet = map.keySet
