@@ -1,11 +1,11 @@
 /*
- * Copyright 2011 Christos KK Loverdos
+ * Copyright 2011-2013 Christos KK Loverdos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,33 +16,22 @@
 
 package com.ckkloverdos.key
 
-
 /**
- * A key with a specific type attached.
  *
- * Keys are ordered by their names and are stored in [[com.ckkloverdos.env.Env]]ironments.
- *
- * @author Christos KK Loverdos <loverdos@gmail.com>.
+ * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-
-trait TypedKey[T] extends Ordered[TypedKey[_]]{
-  def name: String
-  def keyType: Manifest[T]
-  def providesDefaultValue: Boolean
-}
-
-sealed abstract class TypedKeySkeleton[T: Manifest](val name: String) extends TypedKey[T] {
+sealed abstract class TKeySkeleton[T: Manifest](val name: String) extends TKey[T] {
   def keyType = manifest[T]
 
   override def hashCode = (31 * name.## + keyType.##)
 
   override def equals(obj: Any) = obj match {
-    case that: TypedKeySkeleton[_] =>
+    case that: TKeySkeleton[_] ⇒
       (this eq that) ||
-      (this.name == that.name &&
-       this.keyType == that.keyType &&
-       this.getClass == that.getClass)
-    case _ => false
+        (this.name == that.name &&
+          this.keyType == that.keyType &&
+          this.getClass == that.getClass)
+    case _ ⇒ false
   }
 
   override def toString = {
@@ -53,11 +42,11 @@ sealed abstract class TypedKeySkeleton[T: Manifest](val name: String) extends Ty
 
   def providesDefaultValue = false
 
-  def compare(that: TypedKey[_]) = this.name compareTo that.name
+  def compare(that: TKey[_]) = this.name compareTo that.name
 }
 
-class TypedKeyOnly[T: Manifest](override val name: String) extends TypedKeySkeleton[T](name)
+class TKeyOnly[T: Manifest](override val name: String) extends TKeySkeleton[T](name)
 
-class TypedKeyWithDefault[T: Manifest](override val name: String, val default: T) extends TypedKeySkeleton[T](name) {
+class TKeyWithDefault[T: Manifest](override val name: String, val default: T) extends TKeySkeleton[T](name) {
   override def providesDefaultValue = true
 }

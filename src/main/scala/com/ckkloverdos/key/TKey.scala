@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.ckkloverdos.env
-
-import com.ckkloverdos.key.TKeyWithDefault
+package com.ckkloverdos.key
 
 /**
- * A typed key for an [[com.ckkloverdos.env.Env]] with a default value of an empty `Env`.
+ * A key with a specific type attached.
  *
- * @author Christos KK Loverdos <loverdos@gmail.com>
+ * Keys are ordered by their names and are stored in [[com.ckkloverdos.env.Env]]ironments.
+ *
+ * @author Christos KK Loverdos <loverdos@gmail.com>.
  */
-
-case class EnvKey(
-    override val name: String,
-    override val default: Env = Env()
-) extends TKeyWithDefault(name, default)
+trait TKey[T] extends Ordered[TKey[_]]{
+  def name: String
+  def keyType: Manifest[T]
+  def providesDefaultValue: Boolean
+}

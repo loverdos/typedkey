@@ -1,11 +1,11 @@
 /*
- * Copyright 2012 Christos KK Loverdos
+ * Copyright 2011-2013 Christos KK Loverdos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 
 package com.ckkloverdos.env
 
-import com.ckkloverdos.key.TypedKey
+import com.ckkloverdos.key.TKey
 
 /**
  *
@@ -24,8 +24,8 @@ import com.ckkloverdos.key.TypedKey
  */
 
 abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
-  private[env] def map: Map[TypedKey[_], Any]
-  protected def newEnv(map: Map[TypedKey[_], Any]): E
+  private[env] def map: Map[TKey[_], Any]
+  protected def newEnv(map: Map[TKey[_], Any]): E
 
   def selectName(keyName: String): E =
     newEnv(Map(keysOfName(keyName).toSeq.map(tk => (tk, map(tk))): _*))
@@ -33,15 +33,15 @@ abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
   def selectType[T : Manifest]: E =
     newEnv(Map(keysOfType[T].toSeq.map(tk => (tk, map(tk))): _*))
 
-  def contains[T : Manifest](key: TypedKey[T]): Boolean = {
+  def contains[T : Manifest](key: TKey[T]): Boolean = {
     map.contains(key)
   }
 
-  def keysOfType[T : Manifest]: Set[TypedKey[T]] = {
+  def keysOfType[T : Manifest]: Set[TKey[T]] = {
     for {
       typedKey <- map.keySet if(manifest[T] == typedKey.keyType)
     } yield {
-      typedKey.asInstanceOf[TypedKey[T]]
+      typedKey.asInstanceOf[TKey[T]]
     }
   }
 
@@ -73,7 +73,7 @@ abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
    */
   @throws(classOf[NoSuchElementException])
   @throws(classOf[ClassCastException])
-  def apply[T : Manifest](key: TypedKey[T]): T = {
+  def apply[T : Manifest](key: TKey[T]): T = {
     map(key).asInstanceOf[T]
   }
 
@@ -83,15 +83,15 @@ abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
   @inline
   @throws(classOf[NoSuchElementException])
   @throws(classOf[ClassCastException])
-  def getEx[T : Manifest](key: TypedKey[T]): T = {
+  def getEx[T : Manifest](key: TKey[T]): T = {
     this apply key
   }
 
-  def get[T : Manifest](key: TypedKey[T]): Option[T] = {
+  def get[T : Manifest](key: TKey[T]): Option[T] = {
     map.get(key).asInstanceOf[Option[T]]
   }
 
-  def getOrElse[T : Manifest](key: TypedKey[T], default: T): T = {
+  def getOrElse[T : Manifest](key: TKey[T], default: T): T = {
     map.get(key) match {
       case Some(value) ⇒
         value.asInstanceOf[T]
@@ -111,7 +111,7 @@ abstract class EnvBase[E <: EnvBase[E]] { self: E ⇒
 
   def keysIterator = map.keysIterator
 
-  def keysOfName(keyName: String): Set[TypedKey[_]] = {
+  def keysOfName(keyName: String): Set[TKey[_]] = {
     for {
       typedKey <- map.keySet if(typedKey.name == keyName)
     } yield {
