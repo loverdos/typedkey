@@ -27,10 +27,7 @@ sealed abstract class TKeySkeleton[T: Manifest](val name: String) extends TKey[T
 
   override def equals(obj: Any) = obj match {
     case that: TKeySkeleton[_] ⇒
-      (this eq that) ||
-        (this.name == that.name &&
-          this.keyType == that.keyType &&
-          this.getClass == that.getClass)
+        (this.name == that.name && this.keyType == that.keyType)
     case _ ⇒ false
   }
 
