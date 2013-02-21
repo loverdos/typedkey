@@ -150,6 +150,7 @@
             <goals>
               <goal>add-source</goal>
               <goal>compile</goal>
+              <goal>doc-jar</goal>
             </goals>
           </execution>
 
@@ -172,21 +173,6 @@
           <useFile>false</useFile>
           <reportFormat>plain</reportFormat>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9</version>
-        <executions>
-          <execution>
-            <id>attach-javadoc</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
