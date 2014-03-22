@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2011-2012 Christos KK Loverdos
+  ~ Copyright 2011-2014 Christos KK Loverdos
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~   http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@
 
   <groupId>com.ckkloverdos</groupId>
   <artifactId>typedkey</artifactId>
-  <version>0.7.1-SNAPSHOT</version>
+  <version>0.8.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Typedkey</name>
@@ -68,7 +68,7 @@
   </issueManagement>
 
   <properties>
-    <scala.version>2.9.1</scala.version>
+    <scala.version>2.10.3</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
   </properties>
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -114,10 +114,10 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>[1.6.0,)</version>
+                  <version>[1.7.0,)</version>
                 </requireJavaVersion>
                 <requireMavenVersion>
-                  <version>[3.0.3,)</version>
+                  <version>[3.1.1,)</version>
                 </requireMavenVersion>
               </rules>
             </configuration>
@@ -128,7 +128,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.1.6</version>
         <configuration>
           <recompileMode>incremental</recompileMode>
           <scalaVersion>${scala.version}</scalaVersion>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013 Christos KK Loverdos
+ * Copyright 2011-2014 Christos KK Loverdos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package com.ckkloverdos.key
+package typedkey.env
+package immutable
 
-/**
- * A key with a specific type attached.
- *
- * Keys are ordered by their names and are stored in [[com.ckkloverdos.env.Env]]ironments.
- *
- * @author Christos KK Loverdos <loverdos@gmail.com>.
- */
-trait TKey[T] extends Ordered[TKey[_]]{
-  def name: String
-  def keyType: Manifest[T]
-  def providesDefaultValue: Boolean
+import scala.collection.immutable.Map
+import typedkey.TKey
+import typedkey.env.impl.MapBasedEnv
+
+final class Env private[env](
+  private[env] val map: Map[TKey[_], Any]
+) extends MapBasedEnv[Env, Map[TKey[_], Any]](map) {
+
+  protected def newEnv(map: Map[TKey[_], Any]) = new Env(map)
+
+  protected def newMap(elems: (TKey[_], Any)*) = Map(elems: _*)
 }
+
+object Env {
+  def apply(): Env = new Env(Map())
+
+  def apply(env: Env): Env = new Env(Map() ++ env.map)
+}
+

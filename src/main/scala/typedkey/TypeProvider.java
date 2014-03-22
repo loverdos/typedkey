@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013 Christos KK Loverdos
+ * Copyright 2011-2014 Christos KK Loverdos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.ckkloverdos.env
-
-import com.ckkloverdos.key.TKeyWithDefault
+package typedkey;
 
 /**
- * A typed key for an [[com.ckkloverdos.env.Env]] with a default value of an empty `Env`.
+ * A marker interface for type providers.
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-
-case class EnvKey(
-    override val name: String,
-    override val default: Env = Env()
-) extends TKeyWithDefault(name, default)
+public interface TypeProvider {
+}
