@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package typedkey;
+package typedkey.impl
+
+import typedkey.{KeyType, TypeProvider}
+
+import scala.reflect.ClassTag
 
 /**
- * A marker interface for type providers.
+ * [[scala.reflect.ClassTag]]-based [[TypeProvider]].
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-public interface TypeProvider {
+class ClassTagTypeProvider extends TypeProvider {
+  def keyTypeOf[T : ClassTag]: KeyType = {
+    val tag = implicitly[ClassTag[T]]
+    new KeyType(tag, tag.toString())
+  }
+
+  def keyTypeOf[T](c: Class[T]): KeyType = keyTypeOf(ClassTag(c))
 }
+
+object ClassTagTypeProvider extends ClassTagTypeProvider

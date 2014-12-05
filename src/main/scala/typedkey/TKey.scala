@@ -23,7 +23,21 @@ package typedkey
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>.
  */
-trait TKey[T] extends Ordered[TKey[_]]{
+trait TKey[T] extends Ordered[TKey[_]] {
   def name: String
   def keyType: KeyType
+
+  override def hashCode = 31 * name.## + keyType.##
+
+  override def equals(obj: Any) = obj match {
+    case that: TKey[_] ⇒
+      this.name == that.name && this.keyType == that.keyType
+    case _ ⇒ false
+  }
+
+  def compare(that: TKey[_]) = this.name compareTo that.name
+}
+
+object TKey {
+  def ofString(name: String)
 }

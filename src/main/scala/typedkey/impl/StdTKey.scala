@@ -15,17 +15,19 @@
  */
 
 package typedkey
+package impl
 
-import _root_.scala.reflect.ClassTag
+import scala.reflect.ClassTag
 
-/**
- *
- * @author Christos KK Loverdos <loverdos@gmail.com>
- */
-package object scala {
-  def keyTypeOf[T : ClassTag]: KeyType = ClassTagTypeProvider.keyTypeOf[T]
-
-  def keyTypeOf[T](c: Class[T]): KeyType = ClassTagTypeProvider.keyTypeOf(c)
-
-  def Key[T : ClassTag](name: String): TKey[T] = new TKeyImpl[T](keyTypeOf[T], name)
+/** Standard implementation of a [[typedkey.TKey]] */
+class StdTKey[T](val keyType: KeyType, val name: String) extends TKey[T] {
+  override def toString =
+    new java.lang.StringBuilder().
+      append("TKey[").
+        append(name).append(": ").append(keyType).
+      append(']').
+      toString
 }
+
+/** Standard Scala implementation of a [[typedkey.TKey]], using a [[scala.reflect.ClassTag]]. */
+class TagKey[T: ClassTag](override val name: String) extends StdTKey[T](keyTypeOf[T], name)

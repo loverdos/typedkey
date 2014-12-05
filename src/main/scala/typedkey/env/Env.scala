@@ -19,6 +19,7 @@ package typedkey.env
 import typedkey.{TKey, KeyType}
 
 /**
+ * An environment of [[typedkey.TKey]]s.
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
@@ -57,13 +58,20 @@ trait Env {
 
   def toJavaMapByName(fillMe: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef]
 
-  def +[T](key: TKey[T], value: T): Env
+  def toImmutable: immutable.Env
 
-  def -[T](key: TKey[T]): Env
+  def toMutable: mutable.Env
 
   def ++(other: Env): Env
 
   def getRemove[T](key: TKey[T]): (Option[TKey[T]], Env)
 
   def keysOfType(keyType: KeyType): scala.collection.Set[TKey[_]]
+
+  def update[T](key: TKey[T], value: T): Env
+
+  def delete[T](key: TKey[T]): Env
+
+  def +[T](key: TKey[T], value: T): Env = update(key, value)
+  def -[T](key: TKey[T]): Env = delete(key)
 }

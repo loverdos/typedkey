@@ -21,7 +21,6 @@ package typedkey
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
 final class KeyType(val tpe: AnyRef, val tpeName: CharSequence) extends Ordered[KeyType] {
-
   if(tpe == null) {
     throw new IllegalArgumentException("null type")
   }
@@ -36,8 +35,6 @@ final class KeyType(val tpe: AnyRef, val tpeName: CharSequence) extends Ordered[
 
   override def equals(o: Any) =
     o match {
-      case null ⇒
-        false
       case that: KeyType ⇒
         this.tpe == that.tpe && this.tpeName == that.tpeName
       case _ ⇒

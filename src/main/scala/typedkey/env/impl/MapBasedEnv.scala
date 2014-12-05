@@ -16,17 +16,14 @@
 
 package typedkey.env.impl
 
-import typedkey.env.Env
-import typedkey.{TKey, KeyType}
+import typedkey.env.{immutable, mutable, Env}
+import typedkey.{env, KeyType, TKey}
 
 /**
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-abstract class MapBasedEnv[E <: Env, Map <: scala.collection.Map[TKey[_], Any]](
-  map: Map
-) extends Env {
-
+abstract class MapBasedEnv[E <: Env, Map <: scala.collection.Map[TKey[_], Any]](map: Map) extends Env {
   protected def newEnv(map: Map): E
 
   protected def newMap(elems: (TKey[_], Any)*): Map
@@ -60,7 +57,7 @@ abstract class MapBasedEnv[E <: Env, Map <: scala.collection.Map[TKey[_], Any]](
 
   def keysOfName(keyName: String) =
     for {
-      typedKey <- map.keySet if typedKey.name == keyName
+      typedKey ← map.keySet if typedKey.name == keyName
     } yield {
       typedKey
     }
@@ -78,10 +75,6 @@ abstract class MapBasedEnv[E <: Env, Map <: scala.collection.Map[TKey[_], Any]](
       case false ⇒
         (None, this)
     }
-
-  def -[T](key: TKey[T]) = newEnv((map - key).asInstanceOf[Map])
-
-  def +[T](key: TKey[T], value: T) = newEnv((map + (key -> value)).asInstanceOf[Map])
 
   def ++(other: typedkey.env.Env) = newEnv((map ++ other.toMap).asInstanceOf[Map])
 
@@ -101,12 +94,26 @@ abstract class MapBasedEnv[E <: Env, Map <: scala.collection.Map[TKey[_], Any]](
     fillMe
   }
 
-  def valuesOfKeysByName(keyName: String) = {
+  def valuesOfKeysByName(keyName: String): Seq[Any] = {
     val buf = new scala.collection.mutable.ListBuffer[Any]
     val keys = keysOfName(keyName)
     for(key ← keys) {
       buf += map(key)
     }
     buf.toList
+  }
+
+  def toString(separator: String = ", ") = {
+    val formattedPairs = map.map {
+      case (key, null) ⇒
+        s"${key.name}: null [${key.keyType.tpeName}]"
+
+      case (key, value) ⇒
+        s"${key.name}: $value [${key.keyType.tpeName}]"
+    }
+
+    val pairStr = formattedPairs.mkString(separator)
+
+    s"Env($pairStr)"
   }
 }

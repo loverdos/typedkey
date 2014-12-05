@@ -17,27 +17,8 @@
 package typedkey
 
 /**
+ * A marker interface for type providers.
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-final class TKeyImpl[T](val keyType: KeyType, val name: String) extends TKey[T] {
-
-  override def hashCode = 31 * name.## + keyType.##
-
-  override def equals(obj: Any) = obj match {
-    case that: TKeyImpl[_] ⇒
-        this.name == that.name && this.keyType == that.keyType
-    case _ ⇒ false
-  }
-
-  override def toString = {
-    val shortName = getClass.getSimpleName
-    val sb = new _root_.java.lang.StringBuilder()
-    sb.append(shortName)
-    sb.append('['); sb.append(keyType); sb.append(']')
-    sb.append('('); sb.append(name   ); sb.append(')')
-    sb.toString
-  }
-
-  def compare(that: TKey[_]) = this.name compareTo that.name
-}
+trait TypeProvider

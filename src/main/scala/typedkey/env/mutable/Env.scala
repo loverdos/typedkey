@@ -17,28 +17,40 @@
 package typedkey.env
 package mutable
 
-import scala.collection.mutable.Map
-import typedkey.TKey
+import typedkey.{env, TKey}
 import typedkey.env.impl.MapBasedEnv
+
+import scala.collection.{mutable ⇒ smut}
 
 /**
  *
  * @author Christos KK Loverdos <loverdos@gmail.com>
  */
 
-final class Env private[mutable](
-  private[env] val map: Map[TKey[_], Any]
-) extends MapBasedEnv[Env, Map[TKey[_], Any]](map) {
+final class Env(private[this] val map: smut.Map[TKey[_], Any] ) extends MapBasedEnv[Env, smut.Map[TKey[_], Any]](map) {
+  protected def newEnv(map: smut.Map[TKey[_], Any]) = new Env(map)
 
-  protected def newEnv(map: Map[TKey[_], Any]) = new Env(map)
+  protected def newMap(elems: (TKey[_], Any)*) = smut.Map(elems: _*)
 
-  protected def newMap(elems: (TKey[_], Any)*) = Map(elems: _*)
+  def toImmutable: immutable.Env = new immutable.Env(map.toMap)
+
+  def toMutable: Env = this
+
+  def update[T](key: TKey[T], value: T) = {
+    map += key → value
+    this
+  }
+
+  def delete[T](key: TKey[T]) = {
+    map -= key
+    this
+  }
 }
 
 object Env {
-  def apply(): Env = new Env(Map())
+  def apply(): Env = new Env(smut.Map())
 
-  def apply(env: Env): Env = new Env(Map() ++ env.map)
+  def ofOne[T](key: TKey[T], value: T): Env = new Env(smut.Map(key → value))
 }
 
 

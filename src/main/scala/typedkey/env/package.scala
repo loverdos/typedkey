@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package typedkey.scala
-
-import scala.reflect.ClassTag
-import typedkey.{KeyType, TypeProvider}
+package typedkey
 
 /**
- * [[scala.reflect.ClassTag]]-based [[TypeProvider]].
  *
- * @author Christos KK Loverdos <loverdos@gmail.com>
  */
-object ClassTagTypeProvider extends TypeProvider {
-  def keyTypeOf[T : ClassTag]: KeyType = {
-    val tag = implicitly[ClassTag[T]]
-    new KeyType(tag, tag.toString())
-  }
-
-  def keyTypeOf[T](c: Class[T]): KeyType = keyTypeOf(ClassTag(c))
+package object env {
+  final type ImEnv = immutable.Env
+  final val ImEnv = immutable.Env
+  final type MEnv  = mutable.Env
+  final val MEnv = mutable.Env
 }

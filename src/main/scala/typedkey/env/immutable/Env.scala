@@ -18,21 +18,31 @@ package typedkey.env
 package immutable
 
 import scala.collection.immutable.Map
-import typedkey.TKey
+import typedkey.{env, TKey}
 import typedkey.env.impl.MapBasedEnv
 
-final class Env private[env](
-  private[env] val map: Map[TKey[_], Any]
-) extends MapBasedEnv[Env, Map[TKey[_], Any]](map) {
-
+final class Env(private[this] val map: Map[TKey[_], Any]) extends MapBasedEnv[Env, Map[TKey[_], Any]](map) {
   protected def newEnv(map: Map[TKey[_], Any]) = new Env(map)
 
   protected def newMap(elems: (TKey[_], Any)*) = Map(elems: _*)
+
+  def toImmutable: Env = this
+
+  def toMutable: mutable.Env = new mutable.Env(scala.collection.mutable.Map() ++= map)
+
+  def update[T](key: TKey[T], value: T) = {
+    val newMap = map.updated(key, value)
+    new Env(newMap)
+  }
+
+  def delete[T](key: TKey[T]) =
+    if(contains(key)) newEnv(map - key)
+    else this
 }
 
 object Env {
   def apply(): Env = new Env(Map())
 
-  def apply(env: Env): Env = new Env(Map() ++ env.map)
+  def ofOne[T](key: TKey[T], value: T): Env = new Env(Map(key → value))
 }
 

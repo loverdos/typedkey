@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package typedkey.java;
+package typedkey.impl;
 
 import typedkey.KeyType;
 import typedkey.TypeProvider;
@@ -33,7 +33,7 @@ public final class JavaSimpleTypeProvider implements TypeProvider {
 
     public <T> KeyType keyTypeOf(Class<T> clazz) {
         final String canonicalName = clazz.getCanonicalName();
-        final String typeName = canonicalName != null ? canonicalName : clazz.getSimpleName();
+        final String typeName = canonicalName != null ? canonicalName : clazz.getName();
 
         return new KeyType(clazz, typeName);
     }
