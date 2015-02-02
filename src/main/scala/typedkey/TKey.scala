@@ -37,7 +37,3 @@ trait TKey[T] extends Ordered[TKey[_]] {
 
   def compare(that: TKey[_]) = this.name compareTo that.name
 }
-
-object TKey {
-  def ofString(name: String)
-}
